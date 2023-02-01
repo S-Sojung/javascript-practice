@@ -39,7 +39,7 @@
         async function down() {
             let jwtToken = localStorage.getItem("jwtToken");
 
-            let response = await fetch("http://192.168.200.58:8080/post", {
+            let response = await fetch("http://localhost:8080/post", {
                 method: "get", //인증이 필요한 요청은 header(토큰)이 필요하다 
                 headers: {
                     "Authorization": jwtToken
@@ -62,7 +62,7 @@
             tr.innerHTML = `
                 <td>${post.id}</td>
                 <td>${post.title}</td>
-                <td id=post-{$post.id}>${post.content}</td> 
+                <td id=post-${post.id}>${post.content}</td> 
                 <td>${post.user.username}</td>
             `;
             //테이블 안의 값을 변경하고 싶다?? 여기에 id를 넣어야함. 그리고 그 id를 찾아야한다. 

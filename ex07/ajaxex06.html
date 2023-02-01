@@ -10,46 +10,42 @@
 </head>
 
 <body>
-    <h1>게시글 수정하기</h1>
+    <h1>게시글 삭제하기</h1>
     <hr>
 
-    <form>
-        <input type="text" id="id" placeholder="Enter id"><br />
-        <input type="text" id="title" placeholder="Enter title"><br />
-        <input type="text" id="body" placeholder="Enter body"><br />
-        <input type="text" id="userId" placeholder="Enter userId"><br />
-        <button type="button" onclick="updateById()">수정하기</button>
-    </form>
-    <!-- 이때, 타입을 꼭 적어야한다. 폼안의 버튼은 기본적으로 submit -->
+    <input type="text" id="id" placeholder="Enter id">
+    <button type="button" onclick="deleteById()">삭제하기</button>
 
     <script>
+        //왜 delete는 get으로 하지 않을까 (둘다 body로 받는 데이터도 없는데)
+        //get 요청은 일반인들이 자유롭게 할 수 있는데 : a 링크를 통해서... 
+        //링크 안에 코드를 작성해두고 관리자가 그 링크를 클릭하면? 관리자가 접속해서 삭제해주는 꼴이 된다 
+        //암튼 get 요청으로 하이퍼링크를 타고 들어온 사람의 정보를 들고 갈 수 있다는 의미 .
 
-        function updateById() {
-            // 1, 값 받아오기  : 자바스크립트 오브젝트 , 이를 JSON으로 변경해서 던져 줄 것임 
-            let post = {
-                id: $("#id").val(),
-                title: $("#title").val(),
-                body: $("#body").val(),
-                userId: $("#userId").val()
+        //delete는 post로라도 해야한다. 
+        //웹 서버를 만드는 사람은 스크립트 코드는 막아야한다. (put, delete, post 공격못함)
+        //유일하게 할 수 잇는 공격은 get 공격, 하이퍼링크 공격 뿐 
+        //delete는 일반인이 자유롭게 못함
+        function deleteById() {
+            //1. 사용자 값 받기
+            let id = $("#id").val();
+
+            //2. 유효성 검사 : 프론트 유효성 
+            if (id == "" || id == "undefined") { //자바 스크립트에서의 null : undefined
+                alert("삭제할 id 를 입력해주세요");
+                return;
             }
 
-            //2. 통신하기
+            //3. 통신하기
             $.ajax({
-                type: "put",
-                url: `https://jsonplaceholder.typicode.com/posts/${post.id}`,
-                data: JSON.stringify(post),
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8"
-                    //인증이 필요하면 여기에 쿠키나 인증이 들어가야함
-                },
-                dataType: "json"
+                type: "delete",
+                url: `https://jsonplaceholder.typicode.com/posts/${id}`
+                //delete는 body가 없다. body가 없으면? header가 없어야함.
+                //따로응답이 없음~!~ 그래서  dataType: "json" 도 없다 
             })
                 .done(res => {
-                    console.log("id: ", res.id);
-                    console.log("title: ", res.title);
-                    console.log("body: ", res.body);
-                    console.log("userId: ", res.userId);
                     alert("성공");
+                    location.href = "https://www.naver.com";
                 })
                 .fail(err => {
                     console.log(err);
