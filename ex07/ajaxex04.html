@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>게시글 쓰기</h1>
+    <hr>
+    <form>
+        <!-- id를 적지 않는 이유, form 태그로 통신 하지 않기 위해 -->
+        <input type="text" id="title" placeholder="Enter title"><br />
+        <input type="text" id="body" placeholder="Enter body"><br />
+        <input type="text" id="userId" placeholder="Enter userId"><br />
+        <button type="button" onclick="save()">글쓰기</button>
+        <!-- write는 예약어라 안됌  -->
+    </form>
+    <!-- 이때, 타입을 꼭 적어야한다. 폼안의 버튼은 기본적으로 submit -->
+
+    <script>
+        function save() {
+            // 1, 값 받아오기  : 자바스크립트 오브젝트 , 이를 JSON으로 변경해서 던져 줄 것임 
+            let post = {
+                title: $("#title").val(),
+                body: $("#body").val(),
+                userId: $("#userId").val()
+            }
+
+            //2. 통신하기
+            $.ajax({
+                type: "post",
+                url: "https://jsonplaceholder.typicode.com/posts",
+                data: JSON.stringify(post),
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                    //인증이 필요하면 여기에 쿠키나 인증이 들어가야함
+                },
+                dataType: "json"
+            })
+                .done(res => {
+                    console.log("id: ", res.id);
+                    console.log("title: ", res.title);
+                    console.log("body: ", res.body);
+                    console.log("userId: ", res.userId);
+                    alert("성공");
+                })
+                .fail(err => {
+                    console.log(err);
+                    alert("실패");
+                });
+
+
+        }
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <!--Jquery로 통신할 때는 이 방법..-->
+    <h1>ajax get 요청</h1>
+    <hr>
+    <div id="postBox"><!--id는 커멜로 사용 하는 걸로 약속-->
+        <!-- <div>1 제목 내용</div> 샘플을 미리 만들어서 이것을 들고와서 사용  -->
+    </div>
+    <button onclick="getPost()">통신 요청</button>
+
+    <script>
+        // jsp가 낄 자리가 없는 클라이언트 사이드 랜더링
+        //자바 코드로 바인딩 한것이 아닌 자바 스크립트로 바인딩 
+
+        function getPost() {
+            $.ajax({
+                type: "get",//get, post, put, delete 넣는 부분 
+                url: "http://localhost:8080/init/post",
+                dataType: "json" // json, text  
+                //아작스야 저 url에서 json 데이터가 올거니까 자바스크립트 오브젝트로 바꿔달라. : 알아서 파싱해줌
+                //만약 자바라면?? 따로 클래스를 만들어야한다.  
+            })
+                .done(function (res) { //상태코드가 200번대면 자동으로 다운받은 데이터가 매개변수로 들어감
+                    // console.log(res);
+                    if (res.code == 1) { //개발자가 만든 상태코드가 1(이건 걍 API 정리한거) 이라면 ! 성공 
+                        // alert("통신 성공"); 
+                        /*  
+                            let posts = res.data;
+                            //posts.forEach(function (post){});
+                            posts.forEach((post) => {
+                                $("#postBox").prepend(`<div>${post.id} ${post.title} ${post.content}</div>`);
+                            });
+                        */ //함수화 시킴 (그림 그리는 역할 )
+                        render(res.data);
+                        addListener();
+                    } else { //상태코드가 성공했지만, 개발자의 코드가 실패일 경우
+                        alert("통신 실패");
+                    }
+                })
+                .fail(function (err) { //상태코드가 200이외라면 자동으로 실패한 에러정보가 매개변수로 들어감 
+                    console.log(err);
+                    alert("통신 실패");
+                });
+            //fetch처럼 다운로드 하는 함수지만 await를 사용하는 비동기가 될 필요는 없음 
+            //대신 통신이 끝나면 아작스가 알아서 콜백 함수인 done()을 , 실패하면 fail() 을 실행한다 
+        }
+        function render(posts) {
+            // let posts = res.data;
+            posts.forEach((post) => {
+                let el = `
+                    <div id="post${post.id}"> ${post.id} ${post.title} ${post.content}</div> 
+                    <button class="postData" value = "post${post.id}">삭제</button> 
+                    `;//내가 뿌린 데이터에는 아이디를 붙여줘야한다. 
+                //하지만? 버튼에다가 각각 아이디를 줘서 각각의 버튼에 대한 일을 주는건 많은데다가 얼마나 필요할지 모른다. 
+                //버튼이 등록되는 타이밍에 이벤트를 등록해주어야 한다.
+                // <button class="postData" id = "btnDelete-${post.id}">삭제</button> 
+                $("#postBox").prepend(el);
+            });
+        };
+
+        function addListener() {
+            $(".postData").click((event) => {//리스너가 이벤트에다가 누구를 어떤행위를 어떻게 하는지 전달해준다 
+                // console.log(event.currentTarget.getAttribute("id"));
+                console.log(event.currentTarget.value);
+                $(event.currentTarget).remove();
+                $(`#${event.currentTarget.value}`).remove();
+
+            });
+        }
+    </script>
+</body>
+
+</html>

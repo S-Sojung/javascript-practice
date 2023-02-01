@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!--클래스는 페이지에서 여러 개가 있어도 되지만 아이디는 유일해야한다
+        아이디는 자바 스크립트가 쓰는 것, 클래스는 html이 쓰는 것       -->
+    <h1 id="nameBox"> 홍길동 </h1>
+    <button onclick="change()"> 이름 변경 </button>
+    <!-- 버튼은 클래스명, onclick은 매개변수 = 속성.. 많은 속성들이 있으며 
+        버튼을 만들때(생성), 여러 속성이 잇으면서 많은 생성자 오버로딩이 있다 생각하면된다.-->
+
+    <script>
+        let name = "장보고"; //let은 변수를 선언한다는 의미 특별한 타입은 아님. (object 타입...)
+
+        function change() {
+            //자바스크립트는 document 라는 객체를 가지고 있는데
+            //자신의 브라우저의 body의 context 영역을 의미한다. body의 전체적인.. 
+            //<h1 id ="nameBox"> 홍길동 </h1>이것 하나를 dom, element 라고도 부름 
+            // let site = document.querySelectorAll("#h1");
+            let site = document.querySelector("#nameBox");
+            //마크 사이의 값을 name 으로 변경하겠다. 
+            site.innerHTML = name;
+
+            // 이렇게 자바스크립트에다가 html 변수를 사용하는 것보다.
+            // html에다가 자바스크립트 변수 바인딩 하는게 훨씬 편하다. (${name} 처럼 )
+        }
+    </script>
+</body>
+
+</html>

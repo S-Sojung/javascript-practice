@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>게시글 목록</h1>
+    <hr>
+    <button onclick="logout()">로그아웃</button>
+    <div id="postBox">
+        <table id="postBox-table" border="1">
+            <tr>
+                <td>번호</td>
+                <td>제목</td>
+                <td>내용</td>
+                <td>작성자</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <script>
+        function change() {
+            let el = document.querySelector("#post-3");
+
+        }
+        function logout() {
+            localStorage.removeItem("jwtToken");
+            // localStorage.setItem("jwtToken",""); 이것도 가능
+            location.reload();
+        }
+
+        async function down() {
+            let jwtToken = localStorage.getItem("jwtToken");
+
+            let response = await fetch("http://192.168.200.58:8080/post", {
+                method: "get", //인증이 필요한 요청은 header(토큰)이 필요하다 
+                headers: {
+                    "Authorization": jwtToken
+                }
+            });
+            let jsObject = await response.json();
+            render(jsObject);
+        }
+
+        function render(jsObject) {
+            let tableEl = document.querySelector("#postBox-table");
+            for (let i = 0; i < jsObject.data.length; i++) {
+                let tr = makeTr(jsObject.data[i]);
+                tableEl.append(tr);
+            }
+        }
+
+        function makeTr(post) {
+            let tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${post.id}</td>
+                <td>${post.title}</td>
+                <td id=post-{$post.id}>${post.content}</td> 
+                <td>${post.user.username}</td>
+            `;
+            //테이블 안의 값을 변경하고 싶다?? 여기에 id를 넣어야함. 그리고 그 id를 찾아야한다. 
+            //그리고 복잡하고 ... 다른 애들도 id를 줘야함.. 너무?? 힘들다. 
+            return tr;
+        }
+        down();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>ajax get 요청</h1>
+    <hr>
+    <div id="postBox">
+
+    </div>
+    <button onclick="getPost()">통신요청</button>
+    <script>
+
+        function getPost() {
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8080/init/post",
+                dataType: "json" // json, text
+            })
+                .done(function (res) {
+                    //console.log(res);
+                    if (res.code == 1) {
+                        render(res.data);
+                    } else {
+                        alert("통신실패");
+                    }
+                })
+                .fail(function (err) { // http 상태 코드 에러일 경우
+                    console.log(err);
+                    alert("통신실패");
+                });
+        }
+
+        function render(posts) {
+            posts.forEach((post) => {
+                let el = `
+                    <div id="post${post.id}">${post.id} ${post.title} ${post.content}</div>
+                    <button onclick="deleteById(${post.id})"> 삭제 </button>
+                `;
+                $("#postBox").prepend(el);
+            });
+        }
+
+        function deleteById(id) {
+            $(`#post${id}`).remove();
+            $(event.currentTarget).remove();
+        }
+    </script>
+</body>
+
+</html>

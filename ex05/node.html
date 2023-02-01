@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="box">
+        <div id="post-1">
+            <div>1</div>
+            <div>ssar</div>
+        </div>
+        <div id="post-2">
+            <div>2</div>
+            <div>cos</div>
+        </div>
+    </div>
+    <script>
+        let el = document.querySelector("#post-1");
+        let child = el.children; //배열로 리턴받음
+        console.log(el);
+        console.log(child[0]);
+        console.log(child[1]);
+        let nextEl = el.nextElementSibling;
+        //같은 노드의 친구를 찾음 (post-1과 같은 위치(부모)의 다음을 찾음 )
+        //잘 안찾고... id로 찾는게 젤 좋음. 하지만 개념을 알아 두는게 좋다.
+        //같은 레벨, 부모 레벨, 자식 레벨이 있음을.
+        let nextChild = nextEl.children;
+        console.log(nextEl);
+        console.log(nextChild[0]);
+        console.log(nextChild[1]);
+
+
+        let table = document.createElement("table");
+        table.setAttribute("border", "1");
+        table.innerHTML = `
+                <tr>
+                <td>${child[0].textContent}</td>
+                <td>${child[1].textContent}</td>
+                </tr>
+                <tr>
+                <td>${nextChild[0].textContent}</td>
+                <td>${nextChild[1].textContent}</td>
+                </tr>
+                `;
+
+        let tableEl = document.querySelector("#box");
+        tableEl.append(table);
+    </script>
+</body>
+
+</html>

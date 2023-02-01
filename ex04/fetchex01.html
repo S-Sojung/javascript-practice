@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="postBox">
+        <table id="postBox-table" border="1">
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>작성자</th>
+            </tr>
+            <!-- <tr>
+                <td>1</td>
+                <td>제목1</td>
+                <td>내용1</td>
+                <td>홍길동</td>
+            </tr> -->
+        </table>
+    </div>
+    <button onclick="down()">다운로드</button>
+
+    <script>
+        async function down() {  //브라우저는 그림을 다 그린 후에 리스너를 계속 체크함... 
+
+            //    fetch(); //https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch 
+            //자바스크립트로 통신할 수 있도록해줌. fetch는 내부적으로 소켓이 들어가 있다. => 버퍼드 리드 
+            //window 가 들고 있다.  // IO가 일어난다 
+
+            //CORS : 다른 도메인에서 자바스크립트의 자원을 요청하는 통신을 기본적으로 막음 (http 정책)
+
+            // fetch("http://192.168.200.58:8080/init/post")
+            //     .then((response) => response.json())
+            //     .then((data) => console.log(data)); // 요즘 안쓰는 방식
+
+            // //fetch는 promise의 response 타입으로 받음 .. 
+            // //하지만 아직 다운로드 중이기 때문에 response에다가 일단 promise를 줌 (어음 같은 것) -> 데이터를 못 받음
+            // let response = fetch("http://192.168.200.58:8080/init/post", {
+            //     method: "get"
+            //     //get이 디폴트이기 때문에 오브젝트 타입인 {} 없어도 된다. 
+            //     //get은 body와 header의 context 타입이 없다. 
+            // })
+            // console.log(response);
+
+            //await 동기적으로 만들어버림 : 체크포인트를 잡고 이 자리에서 대기함 
+            //async function down() : 얘를 통해 비동기처리를 도와줌 (스택을 빠져나왔다가 다시 돌아오도록 해줌 )
+            //async : 를 보면 바로 코드를 다른 메모리에 저장해둠. await로 체크포인트 해둠 .
+            //펜딩이 끝났다는걸 메모리에 알려주면, 캡처링 된 것을 이용해서 체크포인트 이후 코드를 이어서함 
+            let response = await fetch("http://192.168.200.58:8080/init/post", {
+                method: "get"
+            })
+            let jsObject = await response.json();
+            // 얘도 시간이 걸리는 거니까 await 걸어줌 
+            //response에 있는 json오브젝트를 자바스크립트 오브젝트로 바꿔줌
+            //response.text() 에 있는 text를 자바스크립트 오브젝트로 바꿔줌
+
+
+            //랜더링을 자바스크립트로 하면 클라이언트 사이드 랜더링 // 부하가 적다 
+            //      서버는 데이터만 주고, 클라이언트가 알아서 해석한다. 
+            //      하지만?? 자바스크립트에서 html을 사용하는게 어렵다...
+            //랜더링을 jsp로 하면 서버 사이드 랜더링 
+            //서버는 필요한 것만! 주는게 맞다. 
+
+            //   console.log(jsObject);
+            //   console.log(jsObject.data[0].title);
+
+            render(jsObject);
+        }
+
+        function makeTr(post) {
+            let tr = document.createElement("tr"); //tr 마크를 넣어줌 .
+            tr.innerHTML = `
+                <td>${post.id}</td>
+                <td>${post.title}</td>
+                <td>${post.content}</td>
+                <td>${post.user.username}</td>
+                `;
+            return tr;
+        }
+
+        function render(jsObject) {
+            let tableEl = document.querySelector("#postBox-table"); //클래스를 찾을거면 querySelectorAll
+            // let tableEl = document.getElementById("postBox-table");
+            //만약 클래스를 찾는다면?? 배열로 받아야한다 (클래스는 여러 개가 있을 수 있다.)
+            for (let i = 0; i < jsObject.data.length; i++) {
+                let el = makeTr(jsObject.data[i]);
+                tableEl.append(el);
+                // tableEl.prepend(el);
+            }
+        }
+    </script>
+</body>
+
+</html>

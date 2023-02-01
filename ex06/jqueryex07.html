@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/0d1c1758fd.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://kit.fontawesome.com/0d1c1758fd.css" crossorigin="anonymous">
+    <style>
+        .my-xl {
+            font-size: 100px;
+        }
+
+        .my-cursor {
+            cursor: pointer;
+        }
+
+        .my-cursor:hover {
+            color: rgb(141, 27, 36);
+        }
+    </style>
+</head>
+
+<body>
+    <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>
+    <script>
+        $("#heart").click(() => {
+            // $("#heart").removeClass("fa-regular");
+            // $("#heart").addClass("fa-solid");
+
+            // $("#heart").toggleClass("fa-solid");
+
+            console.log($("#heart").hasClass("fa-solid"));
+            //이런식으로 class가 있는지 확인 가능하지만 이러는 방법보다 value값을 심어두고 그 값으로 계산 하는 방법이 더 좋다. 
+            // if($("#heart").has("fa-solid")){
+            //     $("#heart").removeClass("fa-solid");
+            // }else{
+            //     $("#heart").addClass("fa-solid");
+            // }
+            if ($("#heart").val() == "ok") {
+                $("#heart").removeClass("fa-solid");
+                $("#heart").val("no");
+            } else {
+                $("#heart").addClass("fa-solid");
+                $("#heart").val("ok");
+            }
+
+
+        });
+    </script>
+</body>
+
+</html>

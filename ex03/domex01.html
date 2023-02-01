@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>의자1</h1>
+    <h1>의자2</h1>
+    <h1>의자3</h1>
+    <div>탁자</div>
+    <h3>책상</h3>
+
+    <button id="btnSeat">의자 없애기</button>
+    <script>
+        let e1 = document.querySelector("#btnSeat");
+        console.log(e1);
+
+        e1.addEventListener("click", function () {
+            let e2 = document.querySelectorAll("h1")[0];
+            e2.remove();
+            alert("클릭됨");
+        });
+        //while 을 돌면서 계속 버튼을 주시할 것
+        // "클릭 하는지" -> 버튼에 대한 이벤트 정보는 적혀있음 , "옆에 대한 반응,행위(함수)" 
+    </script>
+</body>
+
+</html>
